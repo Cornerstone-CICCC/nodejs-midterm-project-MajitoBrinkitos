@@ -1,0 +1,54 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --background-color: whitesmoke;
+  --text-color: black;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: lightgray;
+  padding: 15px;
+}
+.navbar .row-nav {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+}
+.navbar .row-nav .col-nav1 {
+  width: 25%;
+  display: flex;
+  justify-content: flex-start;
+}
+.navbar .row-nav .col-nav2 {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+.navbar .row-nav .col-nav2 ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 1.5rem;
+}
+.navbar .row-nav .col-nav2 ul li a {
+  text-decoration: none;
+}
+.navbar .row-nav .col-nav3 {
+  width: 25%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/*# sourceMappingURL=style.css.map */

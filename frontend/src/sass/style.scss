@@ -1,0 +1,60 @@
+@use 'variables.scss';
+
+//body
+* {
+    box-sizing: border-box;
+}
+
+//dark/light
+:root {
+    //body
+    --background-color: whitesmoke;
+    --text-color: black;
+}
+
+//body
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightgray;
+    padding: 15px;
+    .row-nav {
+        display: flex;
+        width: 100%;
+        justify-content: flex-start;
+        .col-nav1 {
+            width: 25%;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .col-nav2 {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            ul {
+                display: flex;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                gap: 1.5rem;
+                 li{
+                        a{
+                            text-decoration: none;
+                        }
+                    }
+                }
+        }
+        .col-nav3 {
+            width: 25%;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+    }
+}

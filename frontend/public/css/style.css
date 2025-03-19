@@ -1,22 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Buenard:wght@400..700&display=swap");
 * {
   box-sizing: border-box;
 }
 
-:root {
-  --background-color: whitesmoke;
-  --text-color: black;
-}
-
 body {
-  background-color: var(--background-color);
-  color: var(--text-color);
+  background-color: #102C57;
+  color: white;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: lightgray;
+  background-color: black;
   padding: 15px;
 }
 .navbar .row-nav {
@@ -29,6 +27,12 @@ body {
   display: flex;
   justify-content: flex-start;
 }
+.navbar .row-nav .col-nav1 a {
+  text-decoration: none;
+  font-family: "Oswald", sans-serif;
+  font-size: 2rem;
+  color: whitesmoke;
+}
 .navbar .row-nav .col-nav2 {
   width: 50%;
   display: flex;
@@ -39,16 +43,91 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 .navbar .row-nav .col-nav2 ul li a {
   text-decoration: none;
+  font-family: "Oswald", sans-serif;
+  font-size: 2rem;
+  color: whitesmoke;
 }
 .navbar .row-nav .col-nav3 {
   width: 25%;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+}
+.navbar .row-nav .col-nav3 button {
+  font-family: "Oswald", sans-serif;
+  font-size: 2rem;
+}
+
+.header .row-h .col-h h1 {
+  text-align: center;
+  font-family: "Oswald", sans-serif;
+  font-size: 3rem;
+}
+.header .row-h .col-h h1 .spanH1 {
+  font-family: "Open Sans", sans-serif;
+}
+
+.main .row-m {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 10px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  gap: 16px;
+}
+.main .row-m .col-m {
+  display: flex;
+  flex-direction: column;
+}
+.main .row-m .col-m .card .card-img {
+  width: 100%;
+  max-width: 300px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.main .row-m .col-m .card .card-body h2 {
+  font-family: "Buenard", serif;
+}
+.main .row-m .col-m .card .card-body p {
+  font-family: "Buenard", serif;
+  font-size: 1.1rem;
+}
+.main .row-m .col-m .card .card-body a {
+  font-family: "Buenard", serif;
+  color: whitesmoke;
+  text-decoration: none;
+  background-color: #DAC0A3;
+  color: black;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.footer {
+  background-color: black;
+  color: #F8F0E5;
+  margin-top: 105px;
+}
+.footer .row-f {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.footer .row-f .col-f {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Oswald", sans-serif;
+  font-size: 20px;
+  margin: 15px 15px;
 }
 
 /*# sourceMappingURL=style.css.map */

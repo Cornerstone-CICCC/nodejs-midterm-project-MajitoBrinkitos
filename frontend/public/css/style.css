@@ -61,6 +61,10 @@ body {
   font-family: "Oswald", sans-serif;
   font-size: 2rem;
 }
+.navbar .row-nav .col-nav3 button a {
+  text-decoration: none;
+  color: black;
+}
 
 .header .row-h .col-h h1 {
   text-align: center;

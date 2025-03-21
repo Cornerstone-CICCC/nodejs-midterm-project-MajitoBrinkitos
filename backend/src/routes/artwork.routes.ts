@@ -1,11 +1,34 @@
+import express from 'express';
+import { isAuthenticated } from '../middlewares/auth.middleware';
 import { Router } from 'express'
-import artworkController from '../controllers/artwork.controller'
+import {
+    home,
+    setCookie,
+    checkCookie,
+    clearCookie,
+    getArtworks,
+    getArtworkById,
+    createArtwork,
+    updateArtwork,
+    deleteArtwork
+} from '../controllers/artwork.controller';
 
-const artworkRouter = Router()
+const router = Router()
 
-artworkRouter.get('/', artworkController.home)
-artworkRouter.get('/set-cookie', artworkController.setCookie)
-artworkRouter.get('/check-cookie', artworkController.checkCookie)
-artworkRouter.get('/clear-cookie', artworkController.clearCookie)
+//home
+router.get('/', home)
 
-export default artworkRouter
+//cookies
+router.get('/set-cookie', setCookie)
+router.get('/check-cookie', checkCookie)
+router.get('/clear-cookie', clearCookie)
+
+//art controllers
+router.get('/getArtworks', isAuthenticated, getArtworks)
+router.get('/:id', isAuthenticated, getArtworkById)
+router.post('/createArtwork', isAuthenticated, createArtwork)
+router.put('/:id', isAuthenticated, updateArtwork)
+router.delete('/:id', isAuthenticated, deleteArtwork)
+
+
+export default router;

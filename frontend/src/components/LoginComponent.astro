@@ -1,0 +1,48 @@
+
+  <section>
+    <h1>Login</h1>
+    <form id="loginForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+    <p id="error" style="color: red;"></p>
+  </section>
+
+  <script type="module">
+    const form = document.getElementById('loginForm');
+    const errorElem = document.getElementById('error');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const email = form.email.value;
+      const password = form.password.value;
+
+      try {
+        const response = await fetch('http://localhost:3000/api/users/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+          credentials: 'include',
+        });
+
+        // Check if the request succeeded
+        if (!response.ok) {
+          const data = await response.json();
+          errorElem.textContent = data.error || 'Login failed. Please try again.';
+          return;
+        }
+
+        // On successful login, redirect the user
+        window.location.href = '/';
+      } catch (err) {
+        errorElem.textContent = 'An unexpected error occurred. Please try again later.';
+        console.error(err);
+      }
+    });
+  </script>

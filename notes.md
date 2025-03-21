@@ -17,3 +17,22 @@
 
 ## Progress
 - [ ] Front end and back end connected 
+
+## Structure
+nodejs-artwork-project
+├── src
+│   ├── config
+│   │   └── db.ts         // Database connection
+│   ├── controllers
+│   │   └── artwork.controller.ts
+│   ├── models
+│   │   └── artwork.model.ts
+│   ├── routes
+│   │   └── artwork.routes.ts
+│   └── server.ts         // Main Express server file
+├── .env                  // Environment variables (e.g., MongoDB URI)
+├── package.json
+├── tsconfig.json
+└── .gitignore
+
+Replaced database calls (Artwork.find(), Artwork.findById(), etc.) with readArtworks() and writeArtworks()

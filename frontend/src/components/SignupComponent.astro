@@ -1,0 +1,63 @@
+---
+---
+  <section>
+    <h1>Register</h1>
+    <form id="registerForm">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <!-- Placeholder for error messages -->
+    <p id="error" style="color: red;"></p>
+  </section>
+
+  <!-- Client-side script to submit the form -->
+  <script type="module">
+    const form = document.getElementById('registerForm');
+    const errorElem = document.getElementById('error');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      // Gather form data
+      const username = form.username.value;
+      const email = form.email.value;
+      const password = form.password.value;
+
+      try {
+        const response = await fetch('http://localhost:3000/api/users/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            username,
+            email,
+            password
+          }),
+          credentials: 'include',
+        })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.error(err));
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // On successful registration, redirect to the login page
+          window.location.href = '/login';
+        } else {
+          // Display error message returned by the API
+          errorElem.textContent = data.error || 'Registration failed. Please try again.';
+        }
+      } catch (err) {
+        errorElem.textContent = 'An unexpected error occurred. Please try again later.';
+        console.error(err);
+      }
+    });
+  </script>

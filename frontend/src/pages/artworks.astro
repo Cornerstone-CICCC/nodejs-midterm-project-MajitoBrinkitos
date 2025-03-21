@@ -1,0 +1,42 @@
+---
+import ArtworkCard from "../components/ArtworkCard.astro";
+
+let artworks = [];
+let error = '';
+
+const fetchArtworks = async() => {
+    try {
+        const response = await fetch('http://localhost:3000/api/artworks/user', {
+            method: 'GET',
+            credentials: 'include',
+        });
+        if(!response.ok) {
+            const data = await response.json();
+            error = data.error || 'Failed to lead artworks';
+            return;
+        }
+        artworks = await response.json()
+    } catch (err){
+        error = 'Unexpected error. Try again later.'
+        console.error(err);
+    }
+};
+
+await fetchArtworks();
+---
+
+<section>
+    <h1>Your Artworks</h1>
+    <p id="error" style="color: red;">{error}</p>
+    <div>
+        {artworks.map(artwork => (
+            <ArtworkCard
+                key={artwork.id}
+                id={artwork.id}
+                title={artwork.title}
+                description={artwork.description}
+                imageUrl={artwork.imageUrl}
+            />
+        ))}
+    </div>
+</section>

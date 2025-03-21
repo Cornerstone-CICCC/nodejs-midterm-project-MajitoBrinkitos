@@ -6,8 +6,7 @@ import {
     setCookie,
     checkCookie,
     clearCookie,
-    getArtworks,
-    getArtworkById,
+    getUserArtworks,
     createArtwork,
     updateArtwork,
     deleteArtwork
@@ -24,8 +23,7 @@ router.get('/check-cookie', checkCookie)
 router.get('/clear-cookie', clearCookie)
 
 //art controllers
-router.get('/getArtworks', isAuthenticated, getArtworks)
-router.get('/:id', isAuthenticated, getArtworkById)
+router.get('/getUserArtworks', isAuthenticated, getUserArtworks)
 router.post('/createArtwork', isAuthenticated, createArtwork)
 router.put('/:id', isAuthenticated, updateArtwork)
 router.delete('/:id', isAuthenticated, deleteArtwork)

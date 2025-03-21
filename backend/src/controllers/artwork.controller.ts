@@ -41,85 +41,78 @@ export const clearCookie = (req: Request, res: Response) => {
     });
 };
 
-// GET /api/artworks - Retrieve all artworks
-export const getArtworks: RequestHandler = (req, res) => {
-    const artworks = readArtworks();
-    res.status(200).json(artworks);
-};
-
-// GET /api/artworks/:id - Retrieve a single artwork by ID
-export const getArtworkById: RequestHandler = (req, res) => {
-    const { id } = req.params;
-    const artworks = readArtworks();
-
-    const artwork = artworks.find(a => a.id === id);
-    if (!artwork) {
-        res.status(404).json({ error: 'Artwork not found' });
-        return;
-    }
-
-    res.status(200).json(artwork);
-};
-
 // POST /api/artworks - Create a new artwork
-export const createArtwork: RequestHandler = (req, res) => {
-    const { title, description, imageUrl } = req.body;
+export const createArtwork = (req: Request, res: Response) => {
+  const { title, description, imageUrl } = req.body;
+  const userId = req.session.user?._id;
 
-    if (!title || !imageUrl) {
-        res.status(400).json({ error: 'Title and image URL are required' });
-        return;
-    }
+  if (!title || !imageUrl || !userId) {
+      return res.status(400).json({ error: 'Title, image URL, and user session are required' });
+  }
 
-    const artworks = readArtworks();
-    const newArtwork = {
-        id: Date.now().toString(), // Generate a unique ID
-        title,
-        description,
-        imageUrl
-    };
+  const artworks = readArtworks();
+  const newArtwork = {
+      id: Date.now().toString(), // Generate a unique ID
+      userId,
+      title,
+      description,
+      imageUrl
+  };
 
-    artworks.push(newArtwork);
-    writeArtworks(artworks);
+  artworks.push(newArtwork);
+  writeArtworks(artworks);
 
-    res.status(201).json(newArtwork);
+  res.status(201).json(newArtwork);
 };
 
-// PUT /api/artworks/:id - Update an existing artwork
-export const updateArtwork: RequestHandler = (req, res) => {
-    const { id } = req.params;
-    const { title, description, imageUrl } = req.body;
+// get User's Artwork
+export const getUserArtworks = (req: Request, res: Response) => {
+  const userId = req.session.user?._id;
 
-    const artworks = readArtworks();
-    const artwork = artworks.find(a => a.id === id);
+  if(!userId){
+    return res.status(401).json({ error: 'Not access granted. Login into your account' });
+  }
 
-    if (!artwork) {
-        res.status(404).json({ error: 'Artwork not found' });
-        return;
-    }
+  const artworks = readArtworks().filter(artwork => artwork.userId === userId);
+  res.status(201).json(artworks);
+}
 
-    // Update fields
-    artwork.title = title || artwork.title;
-    artwork.description = description || artwork.description;
-    artwork.imageUrl = imageUrl || artwork.imageUrl;
+//update artwork
+export const updateArtwork = (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userId = req.session.user?._id;
+  const { title, description, imageUrl } = req.body;
 
-    writeArtworks(artworks);
-    res.status(200).json(artwork);
+  const artworks = readArtworks();
+  const artwork = artworks.find(a => a.id === id && a.userId === userId);
+
+  if (!artwork) {
+      return res.status(404).json({ error: 'Artwork not found or unauthorized' });
+  }
+
+  artwork.title = title || artwork.title;
+  artwork.description = description || artwork.description;
+  artwork.imageUrl = imageUrl || artwork.imageUrl;
+
+  writeArtworks(artworks);
+  res.status(200).json(artwork);
 };
 
-// DELETE /api/artworks/:id - Delete an artwork
-export const deleteArtwork: RequestHandler = (req, res) => {
-    const { id } = req.params;
+//delete artwork
+export const deleteArtwork = (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userId = req.session.user?._id;
 
-    const artworks = readArtworks();
-    const index = artworks.findIndex(a => a.id === id);
+  const artworks = readArtworks();
+  const index = artworks.findIndex(a => a.id === id && a.userId === userId);
 
-    if (index === -1) {
-        res.status(404).json({ error: 'Artwork not found' });
-        return;
-    }
+  if (index === -1) {
+      return res.status(404).json({ error: 'Artwork not found or unauthorized' });
+  }
 
-    artworks.splice(index, 1); // Remove artwork from array
-    writeArtworks(artworks);
+  artworks.splice(index, 1);
+  writeArtworks(artworks);
 
-    res.status(200).json({ success: true, message: 'Artwork deleted successfully' });
+  res.status(200).json({ success: true, message: 'Artwork deleted successfully' });
 };
+

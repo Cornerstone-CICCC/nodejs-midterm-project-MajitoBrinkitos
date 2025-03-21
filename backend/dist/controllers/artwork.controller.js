@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteArtwork = exports.updateArtwork = exports.createArtwork = exports.getArtworkById = exports.getArtworks = exports.clearCookie = exports.checkCookie = exports.setCookie = exports.home = void 0;
+exports.deleteArtwork = exports.updateArtwork = exports.getUserArtworks = exports.createArtwork = exports.clearCookie = exports.checkCookie = exports.setCookie = exports.home = void 0;
 const fileHelpers_1 = require("../utils/fileHelpers");
 // Home
 const home = (req, res) => {
@@ -42,34 +42,18 @@ const clearCookie = (req, res) => {
     });
 };
 exports.clearCookie = clearCookie;
-// GET /api/artworks - Retrieve all artworks
-const getArtworks = (req, res) => {
-    const artworks = (0, fileHelpers_1.readArtworks)();
-    res.status(200).json(artworks);
-};
-exports.getArtworks = getArtworks;
-// GET /api/artworks/:id - Retrieve a single artwork by ID
-const getArtworkById = (req, res) => {
-    const { id } = req.params;
-    const artworks = (0, fileHelpers_1.readArtworks)();
-    const artwork = artworks.find(a => a.id === id);
-    if (!artwork) {
-        res.status(404).json({ error: 'Artwork not found' });
-        return;
-    }
-    res.status(200).json(artwork);
-};
-exports.getArtworkById = getArtworkById;
 // POST /api/artworks - Create a new artwork
 const createArtwork = (req, res) => {
+    var _a;
     const { title, description, imageUrl } = req.body;
-    if (!title || !imageUrl) {
-        res.status(400).json({ error: 'Title and image URL are required' });
-        return;
+    const userId = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id;
+    if (!title || !imageUrl || !userId) {
+        return res.status(400).json({ error: 'Title, image URL, and user session are required' });
     }
     const artworks = (0, fileHelpers_1.readArtworks)();
     const newArtwork = {
         id: Date.now().toString(), // Generate a unique ID
+        userId,
         title,
         description,
         imageUrl
@@ -79,17 +63,28 @@ const createArtwork = (req, res) => {
     res.status(201).json(newArtwork);
 };
 exports.createArtwork = createArtwork;
-// PUT /api/artworks/:id - Update an existing artwork
+// get User's Artwork
+const getUserArtworks = (req, res) => {
+    var _a;
+    const userId = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id;
+    if (!userId) {
+        return res.status(401).json({ error: 'Not access granted. Login into your account' });
+    }
+    const artworks = (0, fileHelpers_1.readArtworks)().filter(artwork => artwork.userId === userId);
+    res.status(201).json(artworks);
+};
+exports.getUserArtworks = getUserArtworks;
+//update artwork
 const updateArtwork = (req, res) => {
+    var _a;
     const { id } = req.params;
+    const userId = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id;
     const { title, description, imageUrl } = req.body;
     const artworks = (0, fileHelpers_1.readArtworks)();
-    const artwork = artworks.find(a => a.id === id);
+    const artwork = artworks.find(a => a.id === id && a.userId === userId);
     if (!artwork) {
-        res.status(404).json({ error: 'Artwork not found' });
-        return;
+        return res.status(404).json({ error: 'Artwork not found or unauthorized' });
     }
-    // Update fields
     artwork.title = title || artwork.title;
     artwork.description = description || artwork.description;
     artwork.imageUrl = imageUrl || artwork.imageUrl;
@@ -97,16 +92,17 @@ const updateArtwork = (req, res) => {
     res.status(200).json(artwork);
 };
 exports.updateArtwork = updateArtwork;
-// DELETE /api/artworks/:id - Delete an artwork
+//delete artwork
 const deleteArtwork = (req, res) => {
+    var _a;
     const { id } = req.params;
+    const userId = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id;
     const artworks = (0, fileHelpers_1.readArtworks)();
-    const index = artworks.findIndex(a => a.id === id);
+    const index = artworks.findIndex(a => a.id === id && a.userId === userId);
     if (index === -1) {
-        res.status(404).json({ error: 'Artwork not found' });
-        return;
+        return res.status(404).json({ error: 'Artwork not found or unauthorized' });
     }
-    artworks.splice(index, 1); // Remove artwork from array
+    artworks.splice(index, 1);
     (0, fileHelpers_1.writeArtworks)(artworks);
     res.status(200).json({ success: true, message: 'Artwork deleted successfully' });
 };

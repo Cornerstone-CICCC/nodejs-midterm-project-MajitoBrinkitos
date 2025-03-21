@@ -41,15 +41,13 @@
             password
           }),
           credentials: 'include',
-        })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-        .catch((err) => console.error(err));
+        });
 
         const data = await response.json();
 
         if (response.ok) {
           // On successful registration, redirect to the login page
+          alert(`Signup successful! Welcome, ${data.username}`);
           window.location.href = '/login';
         } else {
           // Display error message returned by the API
@@ -57,7 +55,7 @@
         }
       } catch (err) {
         errorElem.textContent = 'An unexpected error occurred. Please try again later.';
-        console.error(err);
+        console.error('Error:', err);
       }
     });
   </script>

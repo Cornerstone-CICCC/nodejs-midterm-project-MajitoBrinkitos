@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
+const path_1 = __importDefault(require("path"));
 const artwork_routes_1 = __importDefault(require("./routes/artwork.routes"));
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
 /* import cookieSession from 'cookie-session' */
@@ -27,8 +28,12 @@ app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET || 'you_secret_key',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: process.env.NODE_ENV === 'production' },
+    cookie: { secure: /* process.env.NODE_ENV === 'production' */ false },
 }));
+// API Routes
+app.use('/api/artworks', artwork_routes_1.default);
+app.use('/api/users', user_routes_1.default);
+app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, '../uploads')));
 //Cookie Settings
 /* const SIGN_KEY = process.env.COOKIE_SIGN_KEY
 const ENCRYPT_KEY = process.env.COOKIE_ENCRYPT_KEY
@@ -40,9 +45,6 @@ app.use(cookieSession({
     keys:[SIGN_KEY, ENCRYPT_KEY],
     maxAge: 5 * 60 * 1000
 })) */
-// API Routes
-app.use('/api/artworks', artwork_routes_1.default);
-app.use('/api/users', user_routes_1.default);
 //Routes
 app.get('/', (req, res) => {
     res.status(200).send('Backend is running!');

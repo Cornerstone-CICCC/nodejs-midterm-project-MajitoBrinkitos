@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'
 import session from 'express-session';
+import path from 'path';
 import artworkRoutes from './routes/artwork.routes';
 import userRoutes from './routes/user.routes';
 /* import cookieSession from 'cookie-session' */
@@ -28,9 +29,16 @@ app.use(
         secret: process.env.SESSION_SECRET || 'you_secret_key',
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: process.env.NODE_ENV === 'production' },
+        cookie: { secure: /* process.env.NODE_ENV === 'production' */ false },
     })
 );
+
+// API Routes
+app.use('/api/artworks', artworkRoutes);
+app.use('/api/users', userRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 
 //Cookie Settings
 
@@ -46,9 +54,7 @@ app.use(cookieSession({
     maxAge: 5 * 60 * 1000
 })) */
 
-// API Routes
-app.use('/api/artworks', artworkRoutes);
-app.use('/api/users', userRoutes);
+
 
 //Routes
 app.get('/', (req: Request, res: Response) => {

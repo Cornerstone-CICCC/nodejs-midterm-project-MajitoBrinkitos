@@ -1,7 +1,9 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
 import ArtworkCard from "../components/ArtworkCard.astro";
 
-let artworks = [];
 let error = '';
 
 const fetchArtworks = async() => {
@@ -11,32 +13,26 @@ const fetchArtworks = async() => {
             credentials: 'include',
         });
         if(!response.ok) {
-            const data = await response.json();
-            error = data.error || 'Failed to lead artworks';
-            return;
+/*             const data = await response.json();
+            error = data.error || 'Failed to lead to artworks';
+            return; */
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to fetch artworks.');
         }
-        artworks = await response.json()
+        const data = await response.json()
+        return data.artworks;
     } catch (err){
         error = 'Unexpected error. Try again later.'
-        console.error(err);
+        return [];
     }
 };
 
-await fetchArtworks();
+const artworks = await fetchArtworks();
+console.log(artworks);
 ---
 
-<section>
-    <h1>Your Artworks</h1>
-    <p id="error" style="color: red;">{error}</p>
-    <div>
-        {artworks.map(artwork => (
-            <ArtworkCard
-                key={artwork.id}
-                id={artwork.id}
-                title={artwork.title}
-                description={artwork.description}
-                imageUrl={artwork.imageUrl}
-            />
-        ))}
-    </div>
-</section>
+<Layout>
+    <Navbar />
+    <ArtworkCard />
+    <Footer />
+</Layout>

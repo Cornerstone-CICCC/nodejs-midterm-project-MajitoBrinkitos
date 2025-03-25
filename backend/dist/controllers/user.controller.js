@@ -8,78 +8,80 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.login = exports.signup = void 0;
+exports.login = exports.signup = void 0;
 const fileHelpers_1 = require("../utils/fileHelpers");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 //POST /api/users/signup - Register a new user
-const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, email, password } = req.body;
+        if (!username || !email || !password) {
+            res.status(400).json({ error: 'All fields are required' });
+            return;
+        }
         // Read existing users
         const users = (0, fileHelpers_1.readUsers)();
         // Check for duplicate emails
-        const existingUser = users.find(user => user.email === email);
-        if (existingUser) {
-            res.status(400).json({ error: 'User with this email already exists' });
+        const isDuplicate = users.some(user => user.email === email);
+        if (isDuplicate) {
+            res.status(400).json({ error: 'Email is already registered.' });
             return;
         }
+        // Hash the password
+        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
         // Create new user object
         const newUser = {
-            _id: Date.now().toString(), // Unique ID
+            _id: Date.now().toString(),
             username,
             email,
-            password, // For simplicity; add hashing later
+            password: hashedPassword, // Store hashed password
         };
-        // Add new user to the list and save
+        // Add the user and save
         users.push(newUser);
         (0, fileHelpers_1.writeUsers)(users);
-        // Respond with user data (exclude password)
-        const userResponse = {
-            _id: newUser._id,
-            username: newUser.username,
-            email: newUser.email,
-        };
-        req.session.user = userResponse;
-        res.status(201).json(userResponse);
+        res.status(201).json({ message: 'User created successfully', user: newUser });
     }
     catch (error) {
-        next(error);
+        res.status(500).json({ error: 'Signup failed due to server error.' });
     }
 });
 exports.signup = signup;
 //POST /api/users/login - Log in a user
-const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
-        // Read existing users
-        const users = (0, fileHelpers_1.readUsers)();
-        // Find user by email
-        const user = users.find(user => user.email === email);
-        if (!user || user.password !== password) { // Simple password check
-            res.status(401).json({ error: 'Invalid email or password' });
+        // Validate input
+        if (!email || !password) {
+            res.status(400).json({ error: 'Email and password are required.' });
             return;
         }
-        // Respond with user data (exclude password)
-        const userResponse = {
-            _id: user._id,
+        // Fetch users
+        const users = (0, fileHelpers_1.readUsers)();
+        const user = users.find(user => user.email === email);
+        if (!user) {
+            res.status(401).json({ error: 'Invalid email or password.' });
+            return;
+        }
+        // Verify password
+        const isMatch = yield bcrypt_1.default.compare(password, user.password);
+        if (!isMatch) {
+            res.status(401).json({ error: 'Invalid email or password.' });
+            return;
+        }
+        // Set the user session
+        req.session.user = {
+            _id: user.id,
             username: user.username,
             email: user.email,
         };
-        req.session.user = userResponse;
-        res.status(200).json(userResponse);
+        res.status(200).json({ message: 'Login successful', user: req.session.user });
     }
     catch (error) {
-        next(error);
+        res.status(500).json({ error: 'Login failed due to server error.' });
     }
 });
 exports.login = login;
-//GET /api/users/logout - Log out a user
-const logout = (req, res, next) => {
-    req.session.destroy(err => {
-        if (err) {
-            return next(err);
-        }
-        res.status(200).json({ message: 'Logged out successfully' });
-    });
-};
-exports.logout = logout;

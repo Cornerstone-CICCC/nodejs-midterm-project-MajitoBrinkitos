@@ -1,42 +1,57 @@
----
-export interface Props {
-    id: string;
-    title: string;
-    description: string;
-    imageUrl: string;
-}
----
-<div>
-    <h2>{title}</h2>
-    <img src={imageUrl} alt={title} />
-    <p>{description}</p>
-    <button onclick={`deleteArtwork('${id}')`}>Delete</button>
-    <button onclick={`editArtwork('${id}')`}>Edit</button>
-</div>
+
+<style>
+    a{
+        text-decoration: none;
+        color: black;
+    }
+</style>
+
+<section>
+    <h2>Add a New Artwork</h2>
+    <form id="addArtworkForm" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required />
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+
+        <label for="imageFile">Image:</label>
+        <input type="file" id="imageFile" name="imageFile" accept="image/*" required />
+
+        <button type="submit">
+            <a href="/images/sunrise.png" target="_blank" class="button">Add Network
+        </button>
+    </form>
+    <p id="addArtworkError" style="color: red;"></p>
+</section>
 
 <script type="module">
-    const deleteArtwork = async (id) => {
+    /* const form = document.getElementById('addArtworkForm');
+    const errorElem = document.getElementById('addArtworkError');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        // Create FormData to handle file and text inputs
+        const formData = new FormData(form);
+
         try {
-            const response = await fetch(`http://localhost:3000/api/artworks/${id}`, {
-                method: 'DELETE',
-                credentials: 'include',
+            const response = await fetch('http://localhost:3000/api/artworks', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include', // Include cookies for session
             });
 
             if (response.ok) {
-                alert('Artwork deleted successfully!');
-                window.location.reload(); // Refresh the page
+                alert('Artwork added successfully!');
+                window.location.href = '/portfolio'; // Reload the page to update artworks
             } else {
                 const data = await response.json();
-                alert(data.error || 'Failed to delete artwork.');
+                errorElem.textContent = data.error || 'Failed to add artwork.';
             }
         } catch (err) {
-            alert('An error occurred while deleting artwork.');
+            errorElem.textContent = 'Unexpected error. Try again later.';
             console.error(err);
         }
-    };
-
-    const editArtwork = async (id) => {
-        // Implement the logic for editing an artwork
-        alert(`Editing artwork with ID: ${id}`);
-    };
+    }); */
 </script>

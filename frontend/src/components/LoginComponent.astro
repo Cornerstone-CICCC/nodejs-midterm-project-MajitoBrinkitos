@@ -33,14 +33,14 @@
 
         // Check if the request succeeded
         if (!response.ok) {
-          alert('Login successful! Redirecting to your artworks...');
-          window.location.href = '/artworks';
+          const data = await response.json();
+          errorElem.textContent = data.error || 'Login failed. Please check your credentials.';
           return;
         }
 
         // On successful login, redirect the user
-        const data = await response.json();
-        errorElem.textContent = data.error || 'Login failed. Please check your credentials.';
+        alert('Login successful! Redirecting to your artworks...');
+        window.location.href = '/portfolio';
       } catch (err) {
         errorElem.textContent = 'An unexpected error occurred. Please try again later.';
         console.error('Error', err);

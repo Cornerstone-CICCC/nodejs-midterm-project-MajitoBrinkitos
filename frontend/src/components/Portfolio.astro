@@ -1,0 +1,73 @@
+---
+const fetchArtworks = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/artworks', {
+      credentials: 'include', // Include cookies for session
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch artworks.');
+    }
+
+    const data = await response.json();
+    console.log('Fetched Artworks:', data); // Debug fetched data
+    return data.artworks;
+  } catch (err) {
+    console.error('Error fetching artworks:', err);
+    return []; // Return empty array on error
+  }
+};
+
+const artworks = await fetchArtworks(); // Fetch artworks on load
+console.log('Artworks Array:', artworks); // Debug artworks array
+---
+
+<section>
+    <h1>Your Portfolio</h1>
+    {artworks.length > 0 ? (
+      <div class="artwork-grid">
+        {artworks.map((artwork) => (
+          <div class="artwork-card" key={artwork._id}>
+            <img src={artwork.imageUrl.replace(/\\/g, '/')} alt={artwork.title} />
+            <h3>{artwork.title}</h3>
+            <p>{artwork.description}</p>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div>
+        <p>No artworks yet. Add some to your portfolio!</p>
+        <button id="addArtworkButton">Add Artwork</button>
+      </div>
+    )}
+</section>
+
+<style>
+  .artwork-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .artwork-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .artwork-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+</style>
+
+<script>
+  // Add event listener to the "Add Artwork" button
+  document.getElementById('addArtworkButton')?.addEventListener('click', () => {
+    alert('Redirecting to Add Artwork page...');
+    window.location.href = '/artworks'; // Redirect to artworks page
+  });
+</script>

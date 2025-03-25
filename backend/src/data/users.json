@@ -1,0 +1,56 @@
+[
+  {
+    "id": "1742769358902",
+    "username": "alice",
+    "email": "alice@example.com",
+    "password": "$2b$10$ambxIU3HBo6/xJjUfdLsaOTqWQTkjGd58gJdI8P8T7bvktpayq3xW"
+  },
+  {
+    "id": "1742774854771",
+    "username": "maria",
+    "email": "maria@example.com",
+    "password": "$2b$10$LV2o6dKi1WrwQppD9qvsRexUS2Ni4C8IgwCV2AeIF7d4n2jQdnw0q"
+  },
+  {
+    "id": "1742775460289",
+    "username": "ryan",
+    "email": "ryan@example.com",
+    "password": "$2b$10$l3gndl7aTaXAqpZOYfpFf.eFaEp4E.iFk4Bu1nhOTF5l.liNqPIXa"
+  },
+  {
+    "id": "1742776818540",
+    "username": "tina",
+    "email": "tina@example.com",
+    "password": "$2b$10$kBRc5eUNaX4QBK8QUROu.uMwUzKBfHTENDVA7U7PNUFrhTwe0fWqy"
+  },
+  {
+    "id": "1742778601025",
+    "username": "ana",
+    "email": "ana@example.com",
+    "password": "$2b$10$axic9n8EVFVF7IR6UJVdF.uChDaPz6lp11wdAsa6UyU0QHkvXhTYa"
+  },
+  {
+    "id": "1742788969041",
+    "username": "teresa",
+    "email": "teresa@example.com",
+    "password": "$2b$10$TmiC3XOJ2j.lCEIkPpRbW.eSDXnQU5TkgMBfuIioR36X42dph7d2W"
+  },
+  {
+    "id": "1742790783733",
+    "username": "walter",
+    "email": "walter@hello.com",
+    "password": "$2b$10$YizNFxj9CwgnSNj7t8.LpOM8TWPu0GCFlaV3AYCygqEYCZw4R6LoK"
+  },
+  {
+    "_id": "1742830511257",
+    "username": "susana",
+    "email": "susana@example.com",
+    "password": "$2b$10$M4rmYxyu1Iy/AvCqz4xc5O5gWStCzrcm6G/0NlQdodJd8gLcskz8O"
+  },
+  {
+    "_id": "1742831950641",
+    "username": "elmer",
+    "email": "elmer@example.com",
+    "password": "$2b$10$UCey3dWUYrEhofbKvPz9CeaEaRN/J8CMGxT3rMhTPr/bY96LHp4d."
+  }
+]

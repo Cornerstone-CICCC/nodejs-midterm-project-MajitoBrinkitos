@@ -1,6 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
+//creates files if they don't exist
+const ensureFileExists = (filePath: string) => {
+    if (!fs.existsSync(filePath)) {
+        fs.mkdirSync(path.dirname(filePath), { recursive: true }); // Create directories if they don't exist
+        fs.writeFileSync(filePath, '[]'); // Initialize the file with an empty array
+    }
+};
+
 // Utility to read data from a file
 const readFromFile = (filePath: string): any[] => {
     try {
@@ -22,8 +30,8 @@ const writeToFile = (filePath: string, data: any[]): void => {
 };
 
 // Paths for JSON files
-const usersFilePath = path.join(__dirname, '../../data/users.json');
-const artworksFilePath = path.join(__dirname, '../../data/artworks.json');
+const usersFilePath = path.join(__dirname, '../../src/data/users.json');
+const artworksFilePath = path.join(__dirname, '../../src/data/artworks.json');
 
 // User-specific helpers
 export const readUsers = (): any[] => {

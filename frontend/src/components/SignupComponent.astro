@@ -47,7 +47,7 @@
 
         if (response.ok) {
           // On successful registration, redirect to the login page
-          alert(`Signup successful! Welcome, ${data.username}`);
+          alert(`Signup successful! Welcome, ${username}`);
           window.location.href = '/login';
         } else {
           // Display error message returned by the API
